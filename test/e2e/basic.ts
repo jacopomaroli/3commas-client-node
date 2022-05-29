@@ -31,7 +31,7 @@ describe('Basic check', function () {
       const account: AccountEntity = accounts[0]
       expect(account.id).to.be.a('number')
     })
-    it.only('Subscribes successfully to ws events', async function () {
+    it('Subscribes successfully to ws events', async function () {
       await this.threeCommasClient.waitForWsReady()
       const waitForSub = () => new Promise<void>((resolve) => {
         this.threeCommasClient.subscribe(WSEventType.ConfirmSubscription, function () {

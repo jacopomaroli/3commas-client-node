@@ -9,9 +9,9 @@
     "clean": "tsc --build --clean",
     "watch": "tsc -w",
     "test": "npm run test-unit && npm run test-integration && npm run test-e2e",
-    "test-unit": "mocha -r ts-node/register -u bdd --colors src/**/*.unit.(js|ts)",
-    "test-integration": "mocha -r ts-node/register -u bdd --colors test/integration/*.(js|ts)",
-    "test-e2e": "mocha -r ts-node/register -u bdd --colors test/e2e/*.(js|ts)"
+    "test-unit": "mocha -r ts-node/register -u bdd --colors src/**/*.unit.{js,ts}",
+    "test-integration": "mocha -r ts-node/register -u bdd --colors test/integration/*.{js,ts}",
+    "test-e2e": "mocha -r ts-node/register -u bdd --colors test/e2e/*.{js,ts}"
   },
   "author": "Jacopo Maroli",
   "license": "ISC",

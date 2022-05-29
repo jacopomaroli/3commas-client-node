@@ -41,10 +41,13 @@ export enum RawWSEventTypeMap {
 
 export type WsSubscribers = Record<keyof typeof WSEventType, Function[]>
 
+export const WsStreams = [WSEventType.SmartTrades, WSEventType.Deals]
+
 export type ThreeCommasClientConfig = {
   apiKey: string;
   apiSecret: string;
   wsURL?: string;
+  wsReconnectInterval?: number;
   openAPIConfig?: OpenAPIConfig;
 };
 
@@ -52,6 +55,7 @@ export const ThreeCommasClientDefaultConfig: ThreeCommasClientConfig = {
   apiKey: '',
   apiSecret: '',
   wsURL: 'wss://ws.3commas.io/websocket',
+  wsReconnectInterval: 30 * 1000, // 30s
   openAPIConfig: OpenAPI
 }
 
@@ -59,7 +63,9 @@ export class ThreeCommasClient {
   threeCommasClientConfig: ThreeCommasClientConfig
   RESTClient: Client
   wsClient: WebSocket
+  wsClientReconnect: boolean = false
   wsClientReady: boolean = false
+  wsSubscribedStreams: WSEventType[] = []
   wsSubscribers: WsSubscribers = {
     Open: [],
     Ready: [],
@@ -79,9 +85,28 @@ export class ThreeCommasClient {
     this.RESTClient = new Client(this.threeCommasClientConfig.openAPIConfig)
     this.wsClient = new WebSocket(this.threeCommasClientConfig.wsURL!)
 
+    this.wsConnect()
+  }
+
+  wsConnect () {
     this.wsClient.on('open', () => {
       this.wsClientReady = true
       this.dispatch(WSEventType.Ready, {})
+      this.subscribeToConsumedStreams()
+    })
+
+    this.wsClient.on('error', () => {
+      console.log('socket error')
+      this.wsClientReconnect = true
+    })
+
+    this.wsClient.on('close', () => {
+      if (this.wsClientReconnect) {
+        setTimeout(this.wsConnect, this.threeCommasClientConfig.wsReconnectInterval)
+        this.wsClientReconnect = false
+        this.wsClientReady = false
+        this.wsSubscribedStreams = []
+      }
     })
 
     this.wsClient.on('message', this.wsClientMessageHandler)
@@ -133,11 +158,15 @@ export class ThreeCommasClient {
     return WSEventTypeRawMap[channel]
   }
 
-  subscribe (wsChannel: WSEventType, handler: Function) {
-    if ([WSEventType.Ready, WSEventType.ConfirmSubscription].includes(wsChannel)) {
-      this.wsSubscribers[wsChannel].push(handler)
-      return handler
+  subscribeToConsumedStreams () {
+    for (const wsChannel of WsStreams) {
+      if (this.wsSubscribers[wsChannel].length) {
+        this.maybeSubscribeToStream(wsChannel)
+      }
     }
+  }
+
+  getStreamIdentifier (wsChannel: WSEventType) {
     const channel = this.WSEventType2Raw(wsChannel)
     const channelIdentifier = this.channel2ChannelIdentifier(channel)
     const channelUrl = this.channel2ChannelUrl(channel)
@@ -151,13 +180,47 @@ export class ThreeCommasClient {
         }
       ]
     }
+
+    return JSON.stringify(identifier)
+  }
+
+  maybeSubscribeToStream (wsChannel: WSEventType) {
+    if (this.wsSubscribedStreams.includes(wsChannel)) {
+      return
+    }
+    this.wsSubscribedStreams.push(wsChannel)
+    const identifier = this.getStreamIdentifier(wsChannel)
     const msg = {
-      identifier: JSON.stringify(identifier),
+      identifier,
       command: 'subscribe'
     }
     const msgStr = JSON.stringify(msg)
     this.wsClient.send(msgStr)
+  }
+
+  maybeUnsubscribeFromStream (wsChannel: WSEventType) {
+    if (this.wsSubscribers[wsChannel].length) {
+      return
+    }
+    const subscribedStreamIndex = this.wsSubscribedStreams.findIndex((subscribedStream: WSEventType) => subscribedStream === wsChannel)
+    if (subscribedStreamIndex > -1) {
+      this.wsSubscribedStreams.splice(subscribedStreamIndex, 1)
+    }
+    const identifier = this.getStreamIdentifier(wsChannel)
+    const msg = {
+      identifier,
+      command: 'unsubscribe'
+    }
+    const msgStr = JSON.stringify(msg)
+    this.wsClient.send(msgStr)
+  }
+
+  subscribe (wsChannel: WSEventType, handler: Function) {
     this.wsSubscribers[wsChannel].push(handler)
+    if (!WsStreams.includes(wsChannel)) {
+      return handler
+    }
+    this.maybeSubscribeToStream(wsChannel)
     return handler
   }
 
@@ -166,6 +229,7 @@ export class ThreeCommasClient {
     if (subscriberIndex > -1) {
       this.wsSubscribers[wsChannel].splice(subscriberIndex, 1)
     }
+    this.maybeUnsubscribeFromStream(wsChannel)
   }
 
   dispatch (wsChannel: WSEventType, payload: any) {
