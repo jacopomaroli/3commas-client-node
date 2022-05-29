@@ -1,0 +1,10 @@
+.env
+.vscode
+test
+3commas-client-node-*.tgz
+3commas_openapidoc.yml
+.eslintignore
+.eslintrc.js
+Makefile
+README.md
+tsconfig.json
