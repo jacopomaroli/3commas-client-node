@@ -4,7 +4,7 @@ The client definition is automatically generated from OpenAPI specs using [OpenA
 
 # Quickstart
 ```
-import { ThreeCommasClient, ThreeCommasClientConfig, WSEventType, AccountEntity } from '../../src/index'
+import { ThreeCommasClient, ThreeCommasClientConfig, WSEventType, AccountEntity } from '3commas-client-node'
 
 const THREECOMMAS_API_KEY: string = process.env.THREECOMMAS_API_KEY!
 const THREECOMMAS_API_SECRET: string = process.env.THREECOMMAS_API_SECRET!
