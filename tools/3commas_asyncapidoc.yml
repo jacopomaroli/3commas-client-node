@@ -1,0 +1,171 @@
+asyncapi: 2.0.0
+info:
+  title: 3commas Websockets API
+  version: '1.8.0'
+  description: |
+    3Commas WebSocket API offers real time trading updates
+servers:
+  threeCommas:
+    url: wss://ws.3commas.io/websocket
+    protocol: ws
+    description: |
+      Private server that requires authorization.
+
+      - connect to the base websocket endpoint
+      - create valid signature:
+        ```
+        [linux]$ echo -n "/smart_trades" | openssl dgst -sha256 -hmac "NhqPtmdSJYdKjVHjA7PZj4Mge3R5YNiP1e3UZjInClVN65XAbvqqM6A7H5fATj0j"
+        (stdin)= 8b30fb42a82e4dcfb4d0273d2910c7ae0add2b32938b19c27c44e306c56c20bc
+        ```
+      - build identifier:
+        ```
+        const identifier = {
+          channel: 'SmartTradesChannel',
+          users: [
+            {
+              api_key: 'vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8Asma',
+              signature: '8b30fb42a82e4dcfb4d0273d2910c7ae0add2b32938b19c27c44e306c56c20bc'
+            }
+          ],
+        }
+        ```
+      - build valid message for websocket protocol
+        ```
+        {
+          "identifier": identifier.to_json,
+          "command": "subscribe"
+        }
+        ```
+      - send message to subscribe stream
+        ```
+        {
+          "identifier":"{
+          \"channel\":\"SmartTradesChannel\",
+          \"users\":
+            [
+              {\"api_key\":\"vmPUZE6mv9SD5VNHk4HlWFsOr6aKE2zvsw0MuIgwCIPy6utIco14y7Ju91duEh8Asma\",\"signature\":\"8b30fb42a82e4dcfb4d0273d2910c7ae0add2b32938b19c27c44e306c56c20bc\"}
+            ]}",
+          "command": "subscribe"
+        }
+        ```
+channels:
+  /:
+    publish:
+      description: Send messages to the API
+      operationId: processReceivedMessage
+      message:
+        oneOf:
+          - $ref: '#/components/messages/subscribe'
+          - $ref: '#/components/messages/unsubscribe'
+
+    subscribe:
+      description: Messages that you receive from the API
+      operationId: sendMessage
+      message:
+        oneOf:
+          - $ref: '#/components/messages/confirmSubscription'
+components:
+  messages:
+    subscribe:
+      description: Subscribe to a topic on a single or multiple currency pairs.
+      payload:
+        $ref: '#/components/schemas/subscribe'
+      x-response:
+        $ref: '#/components/messages/confirmSubscription'
+    unsubscribe:
+      description: Unsubscribe, can specify a channelID or multiple currency pairs.
+      payload:
+        $ref: '#/components/schemas/unsubscribe'
+      x-response:
+        $ref: '#/components/messages/confirmSubscription'
+    confirmSubscription:
+      description: Subscription status response to subscribe, unsubscribe or exchange initiated unsubscribe.
+      payload:
+        $ref: '#/components/schemas/subscriptionStatus'
+    testMessage:
+      payload:
+        $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+        # anyOf:
+        #   - $ref: '#/components/schemas/DealMessage'
+        #   - $ref: '#/components/schemas/SmartTradeMessage'
+  schemas:
+    subscribe:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/identifier'
+        command:
+          type: string
+          const: subscribe
+      # required:
+      #   - identifier
+      #   - command
+    unsubscribe:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/identifier'
+        command:
+          type: string
+          const: unsubscribe
+      # required:
+      #   - identifier
+      #   - command
+    subscriptionStatus:
+      type: object
+      properties:
+        identifier:
+          $ref: '#/components/schemas/identifier'
+        type:
+          $ref: '#/components/schemas/type'
+        message:
+          # $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+          # allOf:
+          #   - $ref: '#/components/schemas/message'
+          #   - $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+          anyOf:
+            - $ref: '#/components/schemas/DealMessage'
+            - $ref: '#/components/schemas/SmartTradeMessage'
+      # required:
+      #   - identifier
+    identifier:
+      type: string
+      description: string-encoded authentication token for private-data endpoints containing channel and user's signature.
+    command:
+      type: string
+      enum:
+        - subscribe
+        - unsubscribe
+      example: subscribe
+    type:
+      type: string
+      enum:
+        - confirm_subscription
+      example: subscribe
+    DealMessage:
+      allOf:
+        - $ref: '#/components/schemas/DealMessageDecorator'
+        # - $ref: '#/components/schemas/DealEntity'
+        - $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+    # DealEntity:
+      # $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+    DealMessageDecorator:
+      type: object
+      properties:
+        foo:
+          type: string
+          enum:
+            - Deal
+            - SmartTrade
+    SmartTradeMessage:
+      allOf:
+        - $ref: '#/components/schemas/SmartTradeMessageDecorator'
+        - $ref: '3commas_openapidoc.yml#/components/schemas/SmartTradeV2Entity'
+    SmartTradeMessageDecorator:
+      type: object
+      properties:
+        foo:
+          type: string
+          enum:
+            - Deal
+            - SmartTrade

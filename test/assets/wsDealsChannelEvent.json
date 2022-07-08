@@ -1,0 +1,162 @@
+{
+  "identifier": "{\"channel\":\"DealsChannel\",\"users\":[{\"api_key\":\"123456789abcdef\",\"signature\":\"123456789abcdef\"}]}",
+  "message": {
+    "id": 1234567890,
+    "type": "Deal",
+    "bot_id": 1234567,
+    "max_safety_orders": 30,
+    "deal_has_error": false,
+    "from_currency_id": 0,
+    "to_currency_id": 0,
+    "account_id": 12345678,
+    "active_safety_orders_count": 2,
+    "created_at": "2022-05-31T11:02:08.500Z",
+    "updated_at": "2022-05-31T11:34:54.453Z",
+    "closed_at": null,
+    "finished?": false,
+    "current_active_safety_orders_count": 2,
+    "current_active_safety_orders": 2,
+    "completed_safety_orders_count": 2,
+    "completed_manual_safety_orders_count": 0,
+    "cancellable?": true,
+    "panic_sellable?": true,
+    "trailing_enabled": null,
+    "tsl_enabled": false,
+    "stop_loss_timeout_enabled": false,
+    "stop_loss_timeout_in_seconds": 0,
+    "active_manual_safety_orders": 0,
+    "pair": "USD_KAVA",
+    "status": "bought",
+    "localized_status": "Bought",
+    "take_profit": "1.5",
+    "base_order_volume": "4.641",
+    "safety_order_volume": "9.282",
+    "safety_order_step_percentage": "2.0",
+    "leverage_type": "not_specified",
+    "leverage_custom_value": null,
+    "bought_amount": "8.04516869",
+    "bought_volume": "23.70697",
+    "bought_average_price": "2.946733737164186174448008996",
+    "base_order_average_price": "3.0170223698848539",
+    "sold_amount": "0.0",
+    "sold_volume": "0.0",
+    "sold_average_price": "0",
+    "take_profit_type": "total",
+    "final_profit": "-0.4695408",
+    "martingale_coefficient": "1.0",
+    "martingale_volume_coefficient": "1.05",
+    "martingale_step_coefficient": "1.0",
+    "stop_loss_percentage": "0.0",
+    "error_message": null,
+    "profit_currency": "quote_currency",
+    "stop_loss_type": "stop_loss",
+    "safety_order_volume_type": "quote_currency",
+    "base_order_volume_type": "quote_currency",
+    "from_currency": "USD",
+    "to_currency": "KAVA",
+    "current_price": "2.8959",
+    "take_profit_price": "2.9988",
+    "stop_loss_price": null,
+    "final_profit_percentage": "0",
+    "actual_profit_percentage": "-1.73",
+    "bot_name": "Kraken USD Long Bot",
+    "account_name": "",
+    "usd_final_profit": "-0.47",
+    "actual_profit": "-0.4695408010533646",
+    "actual_usd_profit": "-0.4695408010533646",
+    "failed_message": null,
+    "reserved_base_coin": "23.70697",
+    "reserved_second_coin": "8.04516869",
+    "trailing_deviation": "0.2",
+    "trailing_max_price": null,
+    "tsl_max_price": null,
+    "strategy": "long",
+    "reserved_quote_funds": "20.978480266616",
+    "reserved_base_funds": "8.04516869",
+    "last_known_position_info": null,
+    "buy_steps": [
+      {
+        "price": "2.836",
+        "filled": "0.0"
+      }
+    ],
+    "bot_events": [
+      {
+        "message": "Placing base order. Price: 2.9899 USD Size: 4.64100001 USD (1.55222583 KAVA)",
+        "created_at": "2022-05-31T11:02:09.073Z"
+      },
+      {
+        "message": "Updating base order",
+        "created_at": "2022-05-31T11:02:41.464Z"
+      },
+      {
+        "message": "Placing base order. Price: 2.9994 USD Size: 4.64100002 USD (1.54730947 KAVA)",
+        "created_at": "2022-05-31T11:02:41.912Z"
+      },
+      {
+        "message": "Updating base order",
+        "created_at": "2022-05-31T11:03:21.757Z"
+      },
+      {
+        "message": "Placing base order. Price: 3.0063 USD Size: 4.64100001 USD (1.54375811 KAVA)",
+        "created_at": "2022-05-31T11:03:22.178Z"
+      },
+      {
+        "message": "Updating base order",
+        "created_at": "2022-05-31T11:04:00.800Z"
+      },
+      {
+        "message": "Placing base order. Price: 3.0122 USD Size: 4.64100001 USD (1.54073435 KAVA)",
+        "created_at": "2022-05-31T11:04:01.335Z"
+      },
+      {
+        "message": "Base order executed.  Price: 3.01702237 USD.  Size: 4.64843 USD (1.54073435 KAVA)",
+        "created_at": "2022-05-31T11:04:11.273Z"
+      },
+      {
+        "message": "Placing TakeProfit trade.  Price: 3.0703 USD Size: 4.73051667 USD (1.54073435 KAVA), the price should rise for 1.73% to close the deal. Success.",
+        "created_at": "2022-05-31T11:04:12.191Z"
+      },
+      {
+        "message": "Placing safety trade. Price: 2.9566 USD Size: 9.28200001 USD (3.1394169 KAVA)",
+        "created_at": "2022-05-31T11:04:13.628Z"
+      },
+      {
+        "message": "Placing safety trade. Price: 2.8963 USD Size: 9.74610001 USD (3.36501744 KAVA)",
+        "created_at": "2022-05-31T11:04:14.783Z"
+      },
+      {
+        "message": "Safety trade (1 out of 30) executed. Price: 2.9566 USD. Size: 9.29685 USD (3.1394169 KAVA)",
+        "created_at": "2022-05-31T11:12:22.443Z"
+      },
+      {
+        "message": "Cancelling sell order. Price: 3.0703 USD. Size:  USD (1.54073435 KAVA). Success.",
+        "created_at": "2022-05-31T11:12:23.558Z"
+      },
+      {
+        "message": "Placing TakeProfit trade.  Price: 3.0323 USD Size: 14.19162264 USD (4.68015125 KAVA), the price should rise for 2.71% to close the deal. Success.",
+        "created_at": "2022-05-31T11:12:23.968Z"
+      },
+      {
+        "message": "Placing safety trade. Price: 2.836 USD Size: 10.23340502 USD (3.60839387 KAVA)",
+        "created_at": "2022-05-31T11:12:24.381Z"
+      },
+      {
+        "message": "Safety trade (2 out of 30) executed. Price: 2.8963 USD. Size: 9.76169 USD (3.36501744 KAVA)",
+        "created_at": "2022-05-31T11:34:54.023Z"
+      },
+      {
+        "message": "Cancelling sell order. Price: 3.0323 USD. Size:  USD (4.68015125 KAVA). Success.",
+        "created_at": "2022-05-31T11:34:55.091Z"
+      },
+      {
+        "message": "Placing TakeProfit trade.  Price: 2.9988 USD Size: 24.12585187 USD (8.04516869 KAVA), the price should rise for 3.55% to close the deal. Success.",
+        "created_at": "2022-05-31T11:34:55.506Z"
+      },
+      {
+        "message": "Placing safety trade. Price: 2.7756 USD Size: 10.74507525 USD (3.87126216 KAVA)",
+        "created_at": "2022-05-31T11:34:55.911Z"
+      }
+    ]
+  }
+}

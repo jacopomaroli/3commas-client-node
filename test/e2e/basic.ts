@@ -17,6 +17,7 @@ const THREECOMMAS_API_KEY:string = process.env.THREECOMMAS_API_KEY!
 const THREECOMMAS_API_SECRET:string = process.env.THREECOMMAS_API_SECRET!
 
 describe('Basic check', function () {
+  this.timeout(99999999)
   describe('When the main object is initialized', function () {
     before(function () {
       const config : ThreeCommasClientConfig = { apiKey: THREECOMMAS_API_KEY, apiSecret: THREECOMMAS_API_SECRET }
@@ -31,13 +32,16 @@ describe('Basic check', function () {
       const account: AccountEntity = accounts[0]
       expect(account.id).to.be.a('number')
     })
-    it('Subscribes successfully to ws events', async function () {
+    it.only('Subscribes successfully to ws events', async function () {
       await this.threeCommasClient.waitForWsReady()
       const waitForSub = () => new Promise<void>((resolve) => {
         this.threeCommasClient.subscribe(WSEventType.ConfirmSubscription, function () {
+          debugger
+        })
+        this.threeCommasClient.subscribe(WSEventType.Deals, function (deal: any) {
+          console.log(deal)
           resolve()
         })
-        this.threeCommasClient.subscribe(WSEventType.SmartTrades, function () { })
       })
       return waitForSub().should.eventually.be.fulfilled
     })
