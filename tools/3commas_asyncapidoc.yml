@@ -84,10 +84,9 @@ components:
         $ref: '#/components/schemas/subscriptionStatus'
     testMessage:
       payload:
-        $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
-        # anyOf:
-        #   - $ref: '#/components/schemas/DealMessage'
-        #   - $ref: '#/components/schemas/SmartTradeMessage'
+        oneOf:
+          - $ref: '#/components/schemas/DealMessage'
+          - $ref: '#/components/schemas/SmartTradeMessage'
   schemas:
     subscribe:
       type: object
@@ -123,7 +122,7 @@ components:
           # allOf:
           #   - $ref: '#/components/schemas/message'
           #   - $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
-          anyOf:
+          oneOf:
             - $ref: '#/components/schemas/DealMessage'
             - $ref: '#/components/schemas/SmartTradeMessage'
       required:
