@@ -141,6 +141,89 @@ const parse = async (docStr) => {
   return { _json: doc }
 }
 
+const getOrderedModel = (interfaceModel) => {
+  const uniq = x => [...new Set(x)]
+
+  const primitiveTypes = ['boolean', 'string', 'integer', 'number']
+
+  const getType = x => x.type === 'array' ? x.items.$ref : x.type || x.$ref
+
+  const getNonPrimitiveDeps = (model) => {
+    if (model.model.type !== 'object') return []
+    return uniq(Object.values(model.model.properties).map(getType)).filter(x => !primitiveTypes.includes(x))
+  }
+
+  const getRootIndexes = (idxPool, interfaceModel) => {
+    return idxPool.filter(x => getNonPrimitiveDeps(interfaceModel[x]).length === 0)
+  }
+
+  const getChildren = (model) => {
+    return idxPool.filter(x => Object.values(interfaceModel[x].model.properties).map(getType).some(z => z === model.model.$id))
+  }
+
+  const walk = (idxs, walked) => {
+    const res = []
+    for (const idx of idxs) {
+      const model = interfaceModel[idx]
+      const children = getChildren(model)
+      const children2 = children.filter(x => !walked.includes(x))
+      const subWalked = [...walked, idx]
+      res.push({
+        idx,
+        children: walk(children2, subWalked)
+      })
+    }
+    return res
+  }
+
+  const flattenTree = (parent) => {
+    const res = []
+    for (const child of parent.children) {
+      res.push(child.idx)
+      res.push(...flattenTree(child))
+    }
+    return res
+  }
+
+  const dedupTree = (idxs) => {
+    return uniq(idxs.reverse()).reverse()
+  }
+
+  const getItems = (idxs) => {
+    return idxs.map(x => interfaceModel[x])
+  }
+
+  let idxPool = [...Array(interfaceModel.length).keys()]
+  const rootIdxs = getRootIndexes(idxPool, interfaceModel)
+  idxPool = idxPool.filter(x => !rootIdxs.includes(x))
+
+  // const items = getItems(rootIdxs).map(x => x.modelName)
+  const root = {
+    idx: -1,
+    children: walk(rootIdxs, [-1])
+  }
+  const flat = flattenTree(root)
+  const deduped = dedupTree(flat)
+  const res = getItems(deduped)
+  return res
+}
+
+const fixSchema = (doc) => {
+  for (const schema of Object.values(doc._json.components.schemas)) {
+    if (!schema.properties) continue
+    console.log('1')
+    for (const property of Object.values(schema.properties)) {
+      if (property.type === 'string' && typeof property.const !== 'undefined') {
+        console.log('here')
+        property.enum = [property.const]
+        delete property.const
+      }
+    }
+  }
+}
+
 module.exports = {
-  parse
+  parse,
+  getOrderedModel,
+  fixSchema
 }

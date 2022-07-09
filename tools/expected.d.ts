@@ -1,9 +1,9 @@
-enum AnonymousSchema_3 {
+enum UnsubscribeCommand {
   UNSUBSCRIBE = 'unsubscribe',
 }
 interface Unsubscribe {
-  identifier?: string;
-  command?: AnonymousSchema_3;
+  identifier: string;
+  command: UnsubscribeCommand;
 }
 enum Type {
   CONFIRM_SUBSCRIPTION = 'confirm_subscription',
@@ -489,10 +489,10 @@ interface SubscriptionStatus {
   type?: Type;
   message?: SubscriptionStatusMessage;
 }
-enum AnonymousSchema_2 {
+enum SubscribeCommand {
   SUBSCRIBE = 'subscribe',
 }
 interface Subscribe {
-  identifier?: string;
-  command?: AnonymousSchema_2;
+  identifier: string;
+  command: SubscribeCommand;
 }

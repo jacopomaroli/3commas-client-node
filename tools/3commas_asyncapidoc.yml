@@ -97,9 +97,9 @@ components:
         command:
           type: string
           const: subscribe
-      # required:
-      #   - identifier
-      #   - command
+      required:
+        - identifier
+        - command
     unsubscribe:
       type: object
       properties:
@@ -108,9 +108,9 @@ components:
         command:
           type: string
           const: unsubscribe
-      # required:
-      #   - identifier
-      #   - command
+      required:
+        - identifier
+        - command
     subscriptionStatus:
       type: object
       properties:
