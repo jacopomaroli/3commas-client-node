@@ -126,8 +126,8 @@ components:
           anyOf:
             - $ref: '#/components/schemas/DealMessage'
             - $ref: '#/components/schemas/SmartTradeMessage'
-      # required:
-      #   - identifier
+      required:
+        - identifier
     identifier:
       type: string
       description: string-encoded authentication token for private-data endpoints containing channel and user's signature.
@@ -148,7 +148,7 @@ components:
         # - $ref: '#/components/schemas/DealEntity'
         - $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
     # DealEntity:
-      # $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+    #   $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
     DealMessageDecorator:
       type: object
       properties:

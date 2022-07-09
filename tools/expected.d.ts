@@ -485,7 +485,7 @@ interface SubscriptionStatusMessage {
   isPositionNotFilled?: boolean;
 }
 interface SubscriptionStatus {
-  identifier?: string;
+  identifier: string;
   type?: Type;
   message?: SubscriptionStatusMessage;
 }
