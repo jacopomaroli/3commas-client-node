@@ -8,7 +8,7 @@ interface Unsubscribe {
 enum Type {
   CONFIRM_SUBSCRIPTION = 'confirm_subscription',
 }
-enum DealMessageDecoratorFoo {
+enum DealMessageDecoratorDealMessageDecoratorProp {
   DEAL = 'Deal',
   SMART_TRADE = 'SmartTrade',
 }
@@ -171,6 +171,10 @@ enum StrategyType {
   SHORT = 'short',
   LONG = 'long',
 }
+enum SmartTradeMessageDecoratorSmartTradeMessageDecoratorProp {
+  DEAL = 'Deal',
+  SMART_TRADE = 'SmartTrade',
+}
 interface SmartTradeV2EntityAccount {
   id?: number;
   type?: string;
@@ -321,7 +325,7 @@ interface SmartTradeV2EntityMargin {
   total?: string;
 }
 interface SubscriptionStatusMessage {
-  foo?: DealMessageDecoratorFoo;
+  dealMessageDecoratorProp?: DealMessageDecoratorDealMessageDecoratorProp;
   id?: number;
   type?: DealEntityType;
   botId?: number;
@@ -394,6 +398,7 @@ interface SubscriptionStatusMessage {
   strategy?: StrategyType;
   reservedQuoteFunds?: number;
   reservedBaseFunds?: number;
+  smartTradeMessageDecoratorProp?: SmartTradeMessageDecoratorSmartTradeMessageDecoratorProp;
   version?: number;
   account?: SmartTradeV2EntityAccount;
   instant?: boolean;
@@ -416,7 +421,7 @@ interface SubscriptionStatus {
   message?: SubscriptionStatusMessage;
 }
 interface TestMessage {
-  foo?: DealMessageDecoratorFoo;
+  dealMessageDecoratorProp?: DealMessageDecoratorDealMessageDecoratorProp;
   id?: number;
   type?: DealEntityType;
   botId?: number;
@@ -489,6 +494,7 @@ interface TestMessage {
   strategy?: StrategyType;
   reservedQuoteFunds?: number;
   reservedBaseFunds?: number;
+  smartTradeMessageDecoratorProp?: SmartTradeMessageDecoratorSmartTradeMessageDecoratorProp;
   version?: number;
   account?: SmartTradeV2EntityAccount;
   instant?: boolean;

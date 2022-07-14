@@ -211,10 +211,8 @@ const getOrderedModel = (interfaceModel) => {
 const fixSchema = (doc) => {
   for (const schema of Object.values(doc._json.components.schemas)) {
     if (!schema.properties) continue
-    console.log('1')
     for (const property of Object.values(schema.properties)) {
       if (property.type === 'string' && typeof property.const !== 'undefined') {
-        console.log('here')
         property.enum = [property.const]
         delete property.const
       }

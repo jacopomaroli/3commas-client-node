@@ -35,3 +35,6 @@ async function main () {
 
 main()
 ```
+
+# Patches
+https://github.com/asyncapi/parser-js/pull/543

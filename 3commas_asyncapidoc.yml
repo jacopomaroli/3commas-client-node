@@ -84,7 +84,7 @@ components:
         $ref: '#/components/schemas/subscriptionStatus'
     testMessage:
       payload:
-        anyOf:
+        oneOf:
           - $ref: '#/components/schemas/DealMessage'
           - $ref: '#/components/schemas/SmartTradeMessage'
   schemas:
@@ -119,10 +119,10 @@ components:
           $ref: '#/components/schemas/type'
         message:
           # $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
-          # allOf:
-          #   - $ref: '#/components/schemas/message'
+          # oneOf:
           #   - $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
-          anyOf:
+          #   - $ref: '3commas_openapidoc.yml#/components/schemas/SmartTradeV2Entity'
+          oneOf:
             - $ref: '#/components/schemas/DealMessage'
             - $ref: '#/components/schemas/SmartTradeMessage'
       required:
@@ -151,7 +151,7 @@ components:
     DealMessageDecorator:
       type: object
       properties:
-        foo:
+        dealMessageDecoratorProp:
           type: string
           enum:
             - Deal
@@ -163,7 +163,7 @@ components:
     SmartTradeMessageDecorator:
       type: object
       properties:
-        foo:
+        smartTradeMessageDecoratorProp:
           type: string
           enum:
             - Deal

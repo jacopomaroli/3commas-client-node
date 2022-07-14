@@ -119,12 +119,18 @@ components:
           $ref: '#/components/schemas/type'
         message:
           # $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
-          # allOf:
-          #   - $ref: '#/components/schemas/message'
+          # oneOf:
           #   - $ref: '3commas_openapidoc.yml#/components/schemas/DealEntity'
+          #   - $ref: '3commas_openapidoc.yml#/components/schemas/SmartTradeV2Entity'
           oneOf:
             - $ref: '#/components/schemas/DealMessage'
             - $ref: '#/components/schemas/SmartTradeMessage'
+            # - $ref: '#/components/schemas/SmartTradeMessageDecorator'
+            # - $ref: '#/components/schemas/DealMessageDecorator'
+          # oneOf:
+          #   - type: string
+          #   - type: number
+          #   - type: boolean
       required:
         - identifier
     identifier:
@@ -151,7 +157,7 @@ components:
     DealMessageDecorator:
       type: object
       properties:
-        foo:
+        dealMessageDecoratorProp:
           type: string
           enum:
             - Deal
@@ -163,7 +169,7 @@ components:
     SmartTradeMessageDecorator:
       type: object
       properties:
-        foo:
+        smartTradeMessageDecoratorProp:
           type: string
           enum:
             - Deal
